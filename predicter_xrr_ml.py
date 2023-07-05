@@ -56,13 +56,8 @@ class prediction_sample():
         out_filename = self.save_directory + str(self.scan_number) + "_xrr_fitparams.dat"
         df = pandas.DataFrame()
         print(pred_experimental_test_labels)
-        fit_value = []
-        m = 0
         for keys, values in pred_experimental_test_labels.items():
-            fit_value.append(float(str(values).split("\t")[0].split("\n")[0].split(" ")[4]))
-        for keys, values in pred_experimental_test_labels.items():
-            df[keys] = fit_value[m]
-            m = m +1
+            df[keys] = [float(str(values).split("\t")[0].split("\n")[0].split(" ")[4])]
         df.to_csv(out_filename, sep="\t", index=False)
         
         print("Reflectivity scan: " + str(self.scan_number))
