@@ -60,6 +60,7 @@ class load_xrr():
     def __call__(self, scan_numbers):
         while True:
             self.scan_numbers = scan_numbers
+            print(self.scan_numbers)
             scan_numbers_check = self.xrr_recognizer(scan_numbers)
             print(scan_numbers_check)
             if scan_numbers_check != []:

@@ -17,7 +17,7 @@ from mlreflect.models import TrainedModel
 import pandas
 
 class prediction_sample():
-    def __init__(self, qz, inties, inties_e, scan_number, pathfile = "trained_2_layer.h5", save_directory = "./processed/"):
+    def __init__(self, qz, inties, inties_e, scan_number, pathfile = "trained_2_02_layer.h5", save_directory = "./processed/"):
         self.qz = qz
         self.inties = inties
         self.inties_e = inties_e
@@ -35,6 +35,7 @@ class prediction_sample():
         pred_experimental_test_labels = experimental_fit_output["predicted_parameters"]
         
         fig = plt.figure(dpi = 300)
+        plt.title("XRR - scan no. " + str(self.scan_number))
         plt.semilogy(self.qz, self.inties, 'o', markerfacecolor = "white", markeredgecolor = "blue", label = "Experiment")
         plt.semilogy(self.qz, pred_experimental_reflectivity[0], label = "Prediction", color="red")
         plt.legend()
@@ -44,11 +45,27 @@ class prediction_sample():
         save_directory_comp = self.save_directory + str(self.scan_number) + ".png"
         plt.savefig(save_directory_comp)
         
-        out_filename = self.save_directory + str(self.scan_number) + "xrr_data.dat"
+        out_filename = self.save_directory + str(self.scan_number) + "_xrr_data.dat"
         df = pandas.DataFrame()
         df["qz"] = self.qz
         df["intensity_normalized"] = self.inties
         df["e_intensity_normalized"] = self.inties_e
+        df["intensity_fit"] = pred_experimental_reflectivity[0]
         df.to_csv(out_filename, sep="\t", index=False)
         
+        out_filename = self.save_directory + str(self.scan_number) + "_xrr_fitparams.dat"
+        df = pandas.DataFrame()
         print(pred_experimental_test_labels)
+        fit_value = []
+        m = 0
+        for keys, values in pred_experimental_test_labels.items():
+            fit_value.append(float(str(values).split("\t")[0].split("\n")[0].split(" ")[4]))
+        for keys, values in pred_experimental_test_labels.items():
+            df[keys] = fit_value[m]
+            m = m +1
+        df.to_csv(out_filename, sep="\t", index=False)
+        
+        print("Reflectivity scan: " + str(self.scan_number))
+        for keys, values in pred_experimental_test_labels.items():
+            if str(keys).find("Name") == -1:
+                print(str(keys) + ": " + str(values).split("\t")[0].split("\n")[0].split(" ")[4])

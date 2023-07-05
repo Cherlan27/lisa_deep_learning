@@ -12,7 +12,7 @@ from structure_creater import structure_creater
 
 class water_training():
     def __init__(self, layer, thickness, roughness, sld, thickness1, roughness1, sld1, thickness2, roughness2, sld2):
-        self.q = np.linspace(0.001, 1, 100)
+        self.q = np.linspace(0.001, 0.7, 100)
         self.layer_num = layer
         self.structure = structure_creater(layer, thickness, roughness, sld, thickness1, roughness1, sld1, thickness2, roughness2, sld2)
         self.sample = self.structure.get_sample()
