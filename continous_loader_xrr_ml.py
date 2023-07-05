@@ -334,6 +334,5 @@ class load_xrr():
         #print(primary)
         return qz, intensity/primary, e_intensity/primary
     
-    
 xrr_water = load_xrr()
 xrr_water(2144)
